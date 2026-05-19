@@ -1,0 +1,53 @@
+# Robots.txt Otimizado para SEO Jurídico
+# https://promptsjuridicos.com.br/robots.txt
+
+User-agent: *
+Allow: /
+
+# Bloquear APIs e áreas administrativas
+Disallow: /api/
+Disallow: /admin/
+Disallow: /docsmart/api/
+Disallow: /*.json$
+Disallow: /auth/
+Disallow: /temp/
+Disallow: /private/
+
+# Permitir crawling de recursos importantes
+Allow: /sitemap.xml
+Allow: /manifest.json
+Allow: /og-image.jpg
+Allow: /*.css
+Allow: /*.js
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.gif
+Allow: /*.webp
+Allow: /*.svg
+Allow: /*.ico
+
+# Crawl delay para respeitar servidor
+Crawl-delay: 1
+
+# Sitemap principal
+Sitemap: https://promptsjuridicos.com.br/sitemap.xml
+
+# User-agents específicos para otimização
+User-agent: Googlebot
+Crawl-delay: 1
+Allow: /
+
+User-agent: Bingbot
+Crawl-delay: 2
+Allow: /
+
+# Bloquear bots indesejados
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
