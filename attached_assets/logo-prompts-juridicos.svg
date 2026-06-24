@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" role="img" aria-labelledby="title desc">
+  <title id="title">Prompts Juridicos</title>
+  <desc id="desc">Wordmark logo for Prompts Juridicos</desc>
+  <rect width="640" height="160" rx="24" fill="white"/>
+  <g fill="#111827">
+    <text x="50%" y="62" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="34" font-weight="700" letter-spacing="2">PROMPTS</text>
+    <text x="50%" y="112" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="36" font-weight="700" letter-spacing="3">JURIDICOS</text>
+  </g>
+</svg>
