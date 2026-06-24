@@ -13,7 +13,7 @@ import { AuthModal } from "./auth/auth-modal";
 import { UserDashboard } from "./auth/user-dashboard";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import BuyTokensButton from "./buy-tokens-button";
-import logoPrompts from "@assets/logo-prompts-juridicos.png";
+import logoPrompts from "@assets/logo-prompts-juridicos.svg";
 
 export default function Header() {
   const [isDark, setIsDark] = useState(false);
@@ -78,7 +78,7 @@ export default function Header() {
               return newArray;
             });
             
-            // Próxima letra após 200ms
+            // Proxima letra apos 200ms
             setTimeout(() => animateNextLetter(index + 1), 200);
           }
         }, 50);
@@ -117,7 +117,7 @@ export default function Header() {
             <div className="text-center">
               <img 
                 src={logoPrompts} 
-                alt="Prompts Jurídicos" 
+                alt="Prompts Juridicos" 
                 className="h-12 sm:h-16 mx-auto dark:invert transition-all duration-300"
               />
               <Tooltip>
@@ -151,7 +151,7 @@ export default function Header() {
               </Tooltip>
             </div>
             
-            {/* Botões de autenticação e tema posicionados absolutamente */}
+            {/* Botoes de autenticacao e tema posicionados absolutamente */}
             <div className="absolute right-0 flex items-center space-x-2">
               {isAuthenticated && user ? (
                 <>
@@ -175,7 +175,7 @@ export default function Header() {
                   </Button>
                 </>
               ) : (
-                // Botão de login temporariamente oculto
+                // Botao de login temporariamente oculto
                 null
               )}
               
@@ -195,13 +195,13 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Modal de Autenticação */}
+      {/* Modal de Autenticacao */}
       <AuthModal 
         isOpen={showAuthModal} 
         onClose={() => setShowAuthModal(false)} 
       />
 
-      {/* Modal do Dashboard do Usuário */}
+      {/* Modal do Dashboard do Usuario */}
       <Dialog open={showDashboard} onOpenChange={setShowDashboard}>
         <DialogContent className="max-w-2xl">
           <UserDashboard onClose={() => setShowDashboard(false)} />
