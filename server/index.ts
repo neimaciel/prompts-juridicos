@@ -4,8 +4,24 @@ import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
 app.set('trust proxy', true);
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+const jsonParser = express.json();
+const urlEncodedParser = express.urlencoded({ extended: false });
+
+app.use((req, res, next) => {
+  if (req.path === "/api/payments/webhook") {
+    return next();
+  }
+
+  return jsonParser(req, res, next);
+});
+
+app.use((req, res, next) => {
+  if (req.path === "/api/payments/webhook") {
+    return next();
+  }
+
+  return urlEncodedParser(req, res, next);
+});
 
 app.use((req, res, next) => {
   const start = Date.now();

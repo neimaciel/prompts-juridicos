@@ -75,12 +75,14 @@ const requireAuth = (req: Request, res: any, next: any) => {
 // Configure Google OAuth Strategy (only if credentials are available)
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const appUrl = process.env.APP_URL || process.env.PUBLIC_APP_URL || "http://localhost:5000";
+const googleCallbackUrl = process.env.GOOGLE_CALLBACK_URL || `${appUrl.replace(/\/$/, "")}/api/auth/google/callback`;
 
 if (googleClientId && googleClientSecret) {
   passport.use(new GoogleStrategy({
     clientID: googleClientId,
     clientSecret: googleClientSecret,
-    callbackURL: "https://276431e6-150d-4535-93de-a0596541ade1-00-1kqp6bg32sbhj.spock.replit.dev/api/auth/google/callback"
+    callbackURL: googleCallbackUrl
   }, async (accessToken, refreshToken, profile, done) => {
   try {
     // Check if user exists
@@ -202,7 +204,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     secret: process.env.SESSION_SECRET || 'prompts-juridicos-secret-key',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 24 hours
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000
+    } // 24 hours
   }));
 
   // Initialize Passport
@@ -2302,6 +2308,10 @@ ${prompt.legalPrompt}
   // Confirmar pagamento e adicionar tokens
   app.post("/api/payments/confirm", requireAuth, async (req, res) => {
     try {
+      if (!stripe) {
+        return res.status(503).json({ message: "Sistema de pagamento não configurado" });
+      }
+
       const { paymentIntentId } = req.body;
 
       if (!paymentIntentId) {
@@ -2354,12 +2364,21 @@ ${prompt.legalPrompt}
   });
 
   // Webhook do Stripe para processar eventos
-  app.post("/api/payments/webhook", express.raw({type: 'application/json'}), async (req, res) => {
+  app.post("/api/payments/webhook", async (req, res) => {
+    if (!stripe) {
+      return res.status(503).json({ message: "Sistema de pagamento não configurado" });
+    }
+
     const sig = req.headers['stripe-signature'] as string;
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
     let event: Stripe.Event;
 
     try {
-      event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET || '');
+      if (!sig || !webhookSecret) {
+        return res.status(400).json({ message: "Webhook Stripe não configurado corretamente" });
+      }
+
+      event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
     } catch (err: any) {
       console.error("Erro na verificação do webhook:", err.message);
       return res.status(400).send(`Webhook Error: ${err.message}`);
